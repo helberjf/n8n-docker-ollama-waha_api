@@ -1,8 +1,5 @@
 # n8n
 About my n8n projects
-Claro! Aqui está um guia detalhado para você colocar no seu arquivo README do projeto no GitHub, explicando todos os passos necessários para usar o n8n via Docker, baseado no conteúdo do texto que você forneceu:
-
----
 
 # Guia para usar o n8n no Docker
 
