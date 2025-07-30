@@ -1,0 +1,319 @@
+{
+  "name": "My workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "webhook",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        0,
+        0
+      ],
+      "id": "7ef8e5be-7fed-48a3-b005-6244cced96a0",
+      "name": "Webhook",
+      "webhookId": "bb9581f7-d810-438e-b9a5-42702a7fa6d2"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "ab263d41-de37-492d-a0b3-fba8bed061b0",
+              "name": "session",
+              "value": "={{ $json.body.session }}",
+              "type": "string"
+            },
+            {
+              "id": "207c0727-e70b-4622-88cb-044ff076b991",
+              "name": "chatId",
+              "value": "={{ $json.body.payload.from }}",
+              "type": "string"
+            },
+            {
+              "id": "656aac9f-06b0-43d7-a2b1-62f66bb501c6",
+              "name": "pushName",
+              "value": "={{ $json.body.payload._data.Info.PushName }}",
+              "type": "string"
+            },
+            {
+              "id": "0627bf89-bed3-44dd-9bc3-9719c8e53739",
+              "name": "payload_id",
+              "value": "={{ $json.body.payload.id }}",
+              "type": "string"
+            },
+            {
+              "id": "7946a7f5-e4e0-4095-b872-2e8d9a994fc0",
+              "name": "event",
+              "value": "={{ $json.body.event }}",
+              "type": "string"
+            },
+            {
+              "id": "0884c238-e4f2-401c-a0a4-b870390338da",
+              "name": "message",
+              "value": "={{ $json.body.payload.body }}",
+              "type": "string"
+            },
+            {
+              "id": "170c7d2b-1932-4f26-be62-38d5575882f4",
+              "name": "fromMe",
+              "value": "={{ $json.body.payload.fromMe }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        224,
+        0
+      ],
+      "id": "8390b887-5bcf-4c6c-9e59-85aa4c81ebb9",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.event }}",
+                    "rightValue": "=message",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "5fc55642-c4ba-44db-8485-ebc003618efb"
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        448,
+        0
+      ],
+      "id": "88fc954d-93c0-494c-8b7c-69152f9d1739",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.message }}",
+        "options": {
+          "systemMessage": "=System Message para AI Agent – Clínica de Estética\nVocê é uma assistente virtual educada, prestativa e cordial chamada Clara, responsável pelo primeiro atendimento aos clientes de uma clínica de estética chamada \"Essência Bella\".\nSua função é tirar dúvidas, agendar procedimentos, confirmar horários, apresentar os serviços oferecidos e orientar sobre preparos antes e após os procedimentos.\n\nUse sempre um tom profissional, acolhedor e simpático, como o de uma recepcionista treinada. Evite respostas secas ou frias.\nSe a cliente pedir algo que você não pode resolver (como diagnóstico médico, valores de tratamentos que dependem de avaliação ou atendimento emergencial), oriente a procurar a equipe da clínica ou agendar uma avaliação.\n\nInstruções específicas:\nSempre se apresente como Clara, assistente virtual da clínica Essência Bella.\n\nPergunte o nome da cliente se ela ainda não informou.\n\nOfereça os principais procedimentos disponíveis, como: limpeza de pele, botox, preenchimento facial, depilação a laser, drenagem linfática, entre outros.\n\nPara agendamentos, colete: nome completo, telefone, procedimento desejado, e dias/horários de preferência.\n\nPara dúvidas sobre valores, diga:\n“Os valores podem variar conforme o tipo de procedimento e avaliação individual. Posso agendar uma consulta com a especialista para te passar tudo direitinho, pode ser?”\n\nNunca dê diagnósticos ou orientações médicas detalhadas.\n\nSe o atendimento for fora do horário (definido como das 08h às 19h), responda com uma mensagem automática de fora do expediente.\n\nUse emojis de forma sutil para manter a simpatia, mas sem exagerar (máximo 2 por mensagem).\n\nResponda de forma clara e objetiva, mas sempre gentil.\n\nNunca invente informações nem confirme nada que não tenha sido especificado."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2,
+      "position": [
+        672,
+        0
+      ],
+      "id": "e1083d05-4e36-4f3a-9dfc-fb5ea542f216",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "model": "llama3.2:latest",
+        "options": {
+          "temperature": 0.5
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOllama",
+      "typeVersion": 1,
+      "position": [
+        592,
+        192
+      ],
+      "id": "086245e6-1d8a-4b53-bb14-d37d1ba6ab94",
+      "name": "Ollama Chat Model",
+      "credentials": {
+        "ollamaApi": {
+          "id": "7AYbqAgL2fiOr7iX",
+          "name": "Ollama account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $('Edit Fields').item.json.chatId }}",
+        "sessionTTL": 100,
+        "contextWindowLength": 10
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryRedisChat",
+      "typeVersion": 1.5,
+      "position": [
+        768,
+        192
+      ],
+      "id": "756230f9-91fc-42cd-be51-a53784a58994",
+      "name": "Redis Chat Memory",
+      "credentials": {
+        "redis": {
+          "id": "KF3tfj6xtK29nIEA",
+          "name": "Redis account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "Chatting",
+        "operation": "Send Seen",
+        "session": "={{ $('Edit Fields').item.json.session }}",
+        "chatId": "={{ $('Edit Fields').item.json.chatId }}",
+        "messageId": "={{ $('Edit Fields').item.json.payload_id }}",
+        "requestOptions": {}
+      },
+      "type": "n8n-nodes-waha.WAHA",
+      "typeVersion": 202411,
+      "position": [
+        1024,
+        0
+      ],
+      "id": "cee117b3-9002-469c-8f45-a1f180e8b4c9",
+      "name": "Send Seen",
+      "credentials": {
+        "wahaApi": {
+          "id": "z8q3q5kXhjyUf68J",
+          "name": "WAHA account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "Chatting",
+        "operation": "Send Text",
+        "session": "={{ $('Edit Fields').item.json.session }}",
+        "chatId": "={{ $('Edit Fields').item.json.chatId }}",
+        "text": "= {{ $('AI Agent').item.json.output }}",
+        "requestOptions": {}
+      },
+      "type": "n8n-nodes-waha.WAHA",
+      "typeVersion": 202411,
+      "position": [
+        1232,
+        0
+      ],
+      "id": "d0074ca9-2339-453d-92a6-036124b52741",
+      "name": "Send a text message",
+      "credentials": {
+        "wahaApi": {
+          "id": "z8q3q5kXhjyUf68J",
+          "name": "WAHA account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ollama Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Send Seen",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Redis Chat Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send Seen": {
+      "main": [
+        [
+          {
+            "node": "Send a text message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "5dd39373-ef47-4377-b747-4b403e637923",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "ca7bc022228b6fb9ebd51de5e676fbfccc7cf599d06e7eb0a798bca164fb78c5"
+  },
+  "id": "3SgAyi2lvVF7RfVU",
+  "tags": []
+}
