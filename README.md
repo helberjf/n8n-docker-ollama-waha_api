@@ -133,4 +133,4 @@ Seus workflows e dados ficam preservados porque estão mapeados no volume local.
 
 ---
 
-Assim, com esse guia README, qualquer pessoa com conhecimento básico em Docker poderá rapidamente replicar e rodar o n8n no seu projeto. Se precisar, você pode ainda adicionar links para documentação oficial do n8n e Docker.
+Assim, com esse guia README, qualquer pessoa com conhecimento básico em Docker poderá rapidamente replicar e rodar o n8n no seu projeto.
